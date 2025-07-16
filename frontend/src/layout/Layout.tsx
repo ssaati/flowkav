@@ -1,14 +1,22 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
-import { Layout, LayoutProps } from 'react-admin';
-import AppBar from './AppBar';
-import Menu from './Menu';
-import { darkTheme, lightTheme } from './themes';
-import { AppState } from '../types';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { AppBar, Layout, InspectorButton, TitlePortal } from 'react-admin';
+import '../../assets/app.css';
+import MyMenu from "./MyMenu";
 
-export default (props: LayoutProps) => {
-    const theme = useSelector((state: AppState) =>
-        state.theme === 'dark' ? darkTheme : lightTheme
-    );
-    return <Layout {...props} appBar={AppBar} menu={Menu} theme={theme} />;
-};
+const MyAppBar = () => (
+    <AppBar>
+        <TitlePortal />
+        <InspectorButton />
+    </AppBar>
+);
+
+export default ({ children }) => (
+    <>
+        <Layout appBar={MyAppBar} menu={MyMenu}>{children}</Layout>
+        <ReactQueryDevtools
+            initialIsOpen={false}
+            buttonPosition="bottom-left"
+        />
+    </>
+);

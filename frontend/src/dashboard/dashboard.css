@@ -1,0 +1,43 @@
+.sv-analytics * {
+  font-family:"Yekan Bakh FaNum Regular", "Yekan" !important;
+  --font-family: "Yekan Bakh FaNum Regular", "Yekan";
+}
+.sa-visualizer__header {
+  font-family:"Yekan Bakh FaNum Regular", "Yekan" !important;
+  --font-family: "Yekan Bakh FaNum Regular", "Yekan";
+}
+.sa-visualizer__content {
+  font-family:"Yekan Bakh FaNum Regular", "Yekan" !important;
+  --font-family: "Yekan Bakh FaNum Regular", "Yekan";
+}
+.sa-visualizer__footer-title {
+font-family:"Yekan Bakh FaNum Regular", "Yekan" !important;
+--font-family: "Yekan Bakh FaNum Regular", "Yekan";
+}
+.sa-question__title {
+font-family:"Yekan Bakh FaNum Regular", "Yekan" !important;
+--font-family: "Yekan Bakh FaNum Regular", "Yekan";
+}
+.sa-toolbar {
+font-family:"Yekan Bakh FaNum Regular", "Yekan" !important;
+--font-family: "Yekan Bakh FaNum Regular", "Yekan";
+}
+.sa-toolbar__button {
+font-family:"Yekan Bakh FaNum Regular", "Yekan" !important;
+--font-family: "Yekan Bakh FaNum Regular", "Yekan";
+}
+.sa-text-table {
+font-family:"Yekan Bakh FaNum Regular", "Yekan" !important;
+--font-family: "Yekan Bakh FaNum Regular", "Yekan";
+}
+.sa-statistics-table {
+  font-family:"Yekan Bakh FaNum Regular", "Yekan" !important;
+  --font-family: "Yekan Bakh FaNum Regular", "Yekan";
+}
+.sv-analytics-container {
+  font-family: "Yekan Bakh FaNum Regular", "Yekan";
+}
+
+.sa-commercial{
+  display: none !important;
+}
