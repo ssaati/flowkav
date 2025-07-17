@@ -8,6 +8,9 @@ import {
 } from '@mui/material';
 import {ReactQuestionFactory} from "survey-react-ui";
 import {ElementFactory, Question, Serializer} from "survey-core";
+import dataProvider from "../../providers/dataProvider";
+import {allQuestionNames} from "../SurveyJsUtils";
+import {getLocaleStrings} from "survey-creator-core";
 
 export function AutocompleteQuestion({ question }) {
     const [state, setState] = useState({
@@ -21,29 +24,12 @@ export function AutocompleteQuestion({ question }) {
         const controller = new AbortController();
 
         const search = async () => {
-            if (!state.inputValue || !question.searchUrl) return;
+            if (!state.inputValue) return;
 
             try {
+
                 setState(prev => ({ ...prev, loading: true, error: null }));
-
-                const url = new URL(question.searchUrl);
-                url.searchParams.set('query', state.inputValue);
-
-                // Add survey context as params
-                if (question.contextParams) {
-                    question.contextParams.split(',').forEach(param => {
-                        // const value = survey.getValue(param.trim());
-                        // if (value) url.searchParams.set(param.trim(), value);
-                    });
-                }
-
-                const response = await fetch(url, {
-                    signal: controller.signal
-                });
-
-                if (!response.ok) throw new Error(response.statusText);
-
-                const data = await response.json();
+                const data = await dataProvider.resultItems(question?.form, question?.field, state.inputValue);
                 setState(prev => ({
                     ...prev,
                     options: data,
@@ -65,7 +51,7 @@ export function AutocompleteQuestion({ question }) {
             controller.abort();
             clearTimeout(timer);
         };
-    }, [state.inputValue, question.searchUrl]);
+    }, [state.inputValue]);
 
     return (
         <div className="autocomplete-question">
@@ -111,6 +97,8 @@ export function AutocompleteQuestion({ question }) {
 
 
 const CUSTOM_TYPE = "form-autocomplete";
+const locale = getLocaleStrings("fa");
+locale.qt[CUSTOM_TYPE] = "انتخاب از فرم";
 
 export class FormAutocompleteModel extends Question {
     getType() {
@@ -150,4 +138,49 @@ export function registerFormAutocomplete() {
             return new FormAutocompleteModel(name);
         }
     );
+    Serializer.addProperty(CUSTOM_TYPE, {
+        name: "form",
+        category: "تنظیمات فرم",
+        categoryIndex: 1,
+        type:"dropdown",
+        choices: function (obj, choicesCallback) {
+            if (!choicesCallback)
+                return;
+            dataProvider.getList("forms", { pagination: { page: 1, perPage: 100 }, sort: { field: "name", order: "ASC" } })
+                .then(({ data }) => {
+                    const result: any[] = [];
+                    result.push({ value: null });
+                    for (let i = 0; i < data.length; i++) {
+                        const item = data[i];
+                        result.push({ value: item.id, text: item.name });
+                    }
+                    choicesCallback(result);
+
+                })
+                .catch((error) => console.error(error));
+        }
+    });
+
+    Serializer.addProperty(CUSTOM_TYPE, {
+        name: "field",
+        category: "تنظیمات فرم",
+        dependsOn: [ "form" ],
+        type:"dropdown",
+        choices: function (obj, choicesCallback) {
+            if (!choicesCallback || !obj.form)
+                return;
+            dataProvider.getOne("forms", {id:obj.form})
+                .then(({ data }) => {
+                    let allQuestions = allQuestionNames(data.json) || [];
+                    const result: any[] = [];
+                    result.push({ value: null });
+                    for (let i = 0; i < allQuestions.length; i++) {
+                        const item = allQuestions[i];
+                        result.push({ value: item, text: item });
+                    }
+                    choicesCallback(result);
+                })
+                .catch((error) => console.error(error));
+        }
+    });
 }

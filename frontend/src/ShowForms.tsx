@@ -7,7 +7,7 @@ const actions = (
     </TopToolbar>
 );
 
-export const Dashboard = () => (
+export const ShowForms = () => (
     <List resource={"forms"} actions={actions}>
         <DataTable bulkActionButtons={false}
                    rowClick={(id, basePath, record) => {

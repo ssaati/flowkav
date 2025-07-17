@@ -10,7 +10,7 @@ import "survey-creator-core/survey-creator-core.i18n";
 // import "ace-builds/src-noconflict/ace";
 // import "ace-builds/src-noconflict/ext-searchbox";
 
-import {ComponentCollection, CustomWidgetCollection, Serializer} from "survey-core";
+import {ComponentCollection, CustomWidgetCollection, ElementFactory, Serializer} from "survey-core";
 
 import React, {useEffect, useMemo, useState} from 'react'
 import "survey-creator-core/i18n/persian";
@@ -21,7 +21,7 @@ import {useDataProvider, useUpdate} from "react-admin";
 import {makeFarsi} from "../forms/farsi";
 // import {addFormQuestion} from "./formquestiontype/FormQuestion";
 import {addFormFieldQuestion} from "./formquestiontype/FormField";
-import {PersianDatePicker, registerPersianDatePicker} from "../PersianDatePicker";
+import {registerPersianDatePicker} from "./datepicker/PersianDateQuestion";
 import {addFormQuestion} from "./formquestiontype/FormQuestion";
 import {ReactQuestionFactory} from "survey-react-ui";
 import {AutocompleteQuestion, registerFormAutocomplete} from "./formquestiontype/AutocompleteQuestion"
@@ -31,7 +31,6 @@ const SurveyCreatorWidget = (): React.ReactElement => {
     const [form, setForm] = useState<{id:string}>();
     const { id } = useParams();
     const [update, { isLoading }] = useUpdate();
-    registerPersianDatePicker();
     const creator = useMemo(() => {
         const options = {
             showLogicTab: false,
@@ -39,8 +38,10 @@ const SurveyCreatorWidget = (): React.ReactElement => {
             showTranslationTab: false,
             showPreviewTab:true,
             showJSONEditorTab:false,
-            questionTypes: ["text"
-                , "checkbox"
+            questionTypes: [
+                "text"
+                ,
+                "checkbox"
                 , "radiogroup"
                 , "dropdown"
                 , "boolean"
@@ -53,10 +54,18 @@ const SurveyCreatorWidget = (): React.ReactElement => {
                 , "panel"
                 , "paneldynamic"
                 , "persian-date-picker"
+                , "form-autocomplete"
             ]
         };
         return new SurveyCreator(options);
     }, []);
+
+    const text = creator.toolbox.getItemByName("text");
+    text.removeSubitem("month")
+    text.removeSubitem("week")
+    text.removeSubitem("color")
+    text.removeSubitem("date")
+    text.removeSubitem("datetime-local")
 
     DefaultFonts.push('Yekan');
     creator.isAutoSave = true;
@@ -66,11 +75,8 @@ const SurveyCreatorWidget = (): React.ReactElement => {
     creator.propertyGridNavigationMode='accordion'
     // creator.collapseAllPropertyGridCategories();
     // creator.expandPropertyGridCategory("general");
-    // addFormQuestion();
-    // addFormFieldQuestion(creator);
-    // addDynamicDropdownModel();
-    // registerFormAutocomplete();
-    console.log("Toolbox items:", CustomWidgetCollection.Instance.widgets);
+    registerPersianDatePicker();
+    registerFormAutocomplete();
 
     creator.saveSurveyFunc = (saveNo: number, callback: (no: string, success: boolean) => void) => {
         update('forms', {

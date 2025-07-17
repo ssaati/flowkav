@@ -25,6 +25,10 @@ export default {
         //     method: 'GET',
         // }).then(response => response.json());
     },
+    resultItems: async (form, field, query) => {
+        const { json } = await httpClient(`${API_BASE_URL}/result-items?form=${form}&field=${field}&query=${query}`);
+        return json;
+    },
     myForm: async (formId) => {
         const { json } = await httpClient(`${API_BASE_URL}/forms/my/${formId}`);
         return json;

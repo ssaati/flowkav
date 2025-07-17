@@ -28,7 +28,7 @@ import FormRunner from './surveyjs/FormRunner'
 import FormCreate from "./forms/FormCreate";
 import FormEdit from "./forms/FormEdit";
 import NoMenuLayout from './layout/NoMenuLayout'
-import {Dashboard} from "./Dashboard";
+import {ShowForms} from "./ShowForms";
 import FormEdit2 from "./forms/FormEdit2";
 import FormSteps from "./forms/FormSteps";
 import DashboardPage from "./dashboard/DashboardPage";
@@ -55,7 +55,7 @@ root.render(
             queryClient={queryClient}
             title="Jaryan"
             layout={Layout}
-            // dashboard={()=><Dashboard/>}
+            // dashboard={()=><ShowForms/>}
         >
             <Resource name="users" {...users} options={{ label: 'کاربران'}}/>
             <Resource name="roles" {...roles}  options={{ label: 'گروه ها'}}/>
@@ -63,7 +63,7 @@ root.render(
             <Resource name="cartable" {...cartable}  options={{ label: 'کارتابل'}}/>
             <Resource name="formsteps" {...formstep}  options={{ label: 'مراحل گردش فرم'}} />
             <CustomRoutes noLayout>
-                <Route path="/" element={<NoMenuLayout><Dashboard /></NoMenuLayout>} />
+                <Route path="/" element={<NoMenuLayout><ShowForms /></NoMenuLayout>} />
                 <Route path="form-runner/:id" element={<NoMenuLayout><FormRunner /></NoMenuLayout>} />
                 <Route path="form-viewer/:id" element={<NoMenuLayout><FormViewer /></NoMenuLayout>} />
                 <Route path="cartable/form-viewer/:id" element={<NoMenuLayout><FormViewer /></NoMenuLayout>} />
